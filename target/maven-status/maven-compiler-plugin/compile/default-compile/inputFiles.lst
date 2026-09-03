@@ -1,3 +1,5 @@
+C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\config\FeignErrorDecoder.java
+C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\config\ReferenceServiceClient.java
 C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\controller\UserController.java
 C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\dto\CreateUserRequest.java
 C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\dto\UpdateProfileRequest.java
@@ -9,6 +11,8 @@ C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\entity\User.ja
 C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\exception\DuplicateUserException.java
 C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\exception\ErrorResponse.java
 C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\exception\GlobalExceptionHandler.java
+C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\exception\ReferenceServiceException.java
+C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\exception\ReferenceServiceNotFoundException.java
 C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\exception\UserNotFoundException.java
 C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\repository\UserRepository.java
 C:\sts\projects\user-servie\src\main\java\com\anticorruption\user\service\UserService.java

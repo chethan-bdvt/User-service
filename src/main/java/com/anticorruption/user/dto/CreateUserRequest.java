@@ -25,8 +25,8 @@ public class CreateUserRequest {
 	String mobileNumber;
 	
 	@NotNull(message="State is required")
-	private UUID stateId;
+	private String state;
 	
 	@NotNull(message = "District is required")
-	private UUID districtId;
+	private String district;
 }

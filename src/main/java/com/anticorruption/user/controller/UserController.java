@@ -39,7 +39,7 @@ public class UserController {
 	@PostMapping("")
 	public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
 		UserResponse user = userService.createUser(request.getName(), request.getEmail(), 
-				request.getMobileNumber(), request.getStateId(), request.getDistrictId());
+				request.getMobileNumber(), request.getState(), request.getDistrict());
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(user);
 	}
@@ -65,12 +65,10 @@ public class UserController {
 	}
 	
 	@GetMapping("")
-	public ResponseEntity<List<User>> getAllUsers() {
-		List<User> users = userRepository.findAll();
+	public ResponseEntity<List<UserResponse>> getAllUsers() {
+		List<UserResponse> users = userService.getAllUsers();
 		return ResponseEntity.ok(users);
 	}
-	
-	
 	
 }
 

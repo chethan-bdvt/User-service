@@ -1,12 +1,14 @@
 package com.anticorruption.user.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.anticorruption.user.config.ReferenceServiceClient;
 import com.anticorruption.user.dto.UpdateProfileRequest;
 import com.anticorruption.user.dto.UserResponse;
 import com.anticorruption.user.entity.SubscriptionRequest;
@@ -23,13 +25,16 @@ public class UserService {
 
 	private UserRepository userRepository;
 	
+	private ReferenceServiceClient referenceServiceClient;
+	
 	public UserResponse userResponse;
 	
 	public SubscriptionResponse subscriptionResponse;
 
 	@Autowired
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, ReferenceServiceClient referenceClient) {
 		this.userRepository = userRepository;
+		this.referenceServiceClient = referenceClient;
 	}
 	
 	@Transactional(readOnly= true)
@@ -47,8 +52,8 @@ public class UserService {
 	}
 	
 	public UserResponse createUser(String name,
-			String email, String mobile, UUID stateId,
-			UUID districId) {
+			String email, String mobile, String stateName,
+			String districName) {
 		if(userRepository.existsByEmail(email)) {
 			throw new IllegalArgumentException("Email Already exists");
 		}
@@ -56,13 +61,18 @@ public class UserService {
 		if(userRepository.existsByMobileNumber(mobile)) {
 			throw new IllegalArgumentException("Mobile Number is already exist");
 		}
+		
+		ReferenceServiceClient.StateResponse state = referenceServiceClient.getStateByName(stateName);
+		
+		ReferenceServiceClient.DistrictResponse district = referenceServiceClient.getStateAndDisttictByName(
+				stateName, districName);
+		
 		User user = new User();
 		user.setFirstName(name);
 		user.setEmail(email);
 		user.setMobileNumber(mobile);
-		user.setStateId(stateId);
-		user.setDistrictId(districId);
-		
+		user.setStateId(state.id());
+		user.setDistrictId(district.id());
 		User createdUser = userRepository.save(user);
 		return mapToResponse(createdUser);
 	}
@@ -104,9 +114,18 @@ public class UserService {
 		userResponse.setName(user.getFirstName());
 		userResponse.setEmail(user.getEmail());
 		userResponse.setMobile(user.getMobileNumber());
-		userResponse.setState(null);
-		userResponse.setStateCode(null);
-		userResponse.setDistrict(null);
+		if(user.getStateId() != null) {
+			ReferenceServiceClient.StateResponse state = referenceServiceClient.getStateById(user.getStateId());
+			
+			userResponse.setState(state.name());
+			userResponse.setStateCode(state.code());
+		}
+		
+		if(user.getDistrictId() != null) {
+			ReferenceServiceClient.DistrictResponse district = referenceServiceClient.getDistrictById(user.getDistrictId());
+			userResponse.setDistrict(district.name());
+		}
+		
 		userResponse.setSubscriptionType(user.getSubscriptionType());
 		userResponse.setSubscriptionEndDate(user.getSubscriptionEndDate());
 		userResponse.setActive(user.isActive());
@@ -166,5 +185,9 @@ public class UserService {
 		return subscriptionResponse;
 	}
 	
+	public List<UserResponse> getAllUsers() {
+			List<User> users = userRepository.findAll();
+			return users.stream().map(this::mapToResponse).toList();
+	}
 	
 }

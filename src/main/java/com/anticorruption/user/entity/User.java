@@ -73,7 +73,7 @@ public class User {
 		updatedAt = now;
 		
 		if(subscriptionType == null) {
-			subscriptionType = subscriptionType.FREE;
+			subscriptionType = SubscriptionType.FREE;
 		}
 		active = true;
 	}
